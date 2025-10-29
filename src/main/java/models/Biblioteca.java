@@ -39,4 +39,29 @@ public class Biblioteca {
     public void setEmprestimos(List<Emprestimo> emprestimos) {
         this.emprestimos = emprestimos;
     }
+
+    public List<Livro> livroDisponiveis() {
+        List<Livro> disponiveis = new ArrayList<>();
+
+        for(Livro livro : livros) {
+            if(livro.isDisponivel()){
+                disponiveis.add(livro);
+            }
+        }
+
+        return disponiveis;
+    }
+
+    public boolean livroDisponivel(int id) {
+
+        boolean emprestado = false;
+
+        for(Livro livro : livros) {
+            if(livro.isDisponivel()){
+                emprestado = true;
+            }
+        }
+
+        return emprestado;
+    }
 }

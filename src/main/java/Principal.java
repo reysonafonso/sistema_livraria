@@ -49,12 +49,9 @@ class Principal {
         System.out.print("Deseja ver a lista de livros disponíveis? ");
         resp = sc.nextLine();
         while(!resp.equals("NAO")){
-            List<Livro> disponiveis = bib.getLivros();
-            for(Livro l: disponiveis){
-                if(l.isDisponivel()) {
-                    System.out.println(l.getId());
-                    System.out.println(l.getTitulo());
-                }
+            for(Livro l: bib.livroDisponiveis()){
+                System.out.println(l.getId());
+                System.out.println(l.getTitulo());
             }
             System.out.print("Deseja emprestar algum livro? ");
             resp = sc.nextLine();
@@ -62,24 +59,26 @@ class Principal {
                 System.out.print("Digite o ID do livro: ");
                 int id = Integer.parseInt(sc.nextLine());
 
-                System.out.println("Digite o nome do cliente: ");
-                String nomeCliente = sc.nextLine();
-
-                emp.setId(1);
-                emp.setNomeCliente(nomeCliente);
-
-                for(Livro l: disponiveis) {
-                    if (l.getId() == id) {
-                        emp.setLivro(l);
-                        emp.setDataEmprestimo(new Date());
-                        emp.setDataDevolucao(null);
-                        l.setDisponivel(false);
+                if(bib.livroDisponivel(id)){
+                    System.out.println("Digite o nome do cliente: ");
+                    String nomeCliente = sc.nextLine();
+                    emp.setId(1);
+                    emp.setNomeCliente(nomeCliente);
+                    for(Livro l: bib.livroDisponiveis()){
+                        if(l.getId() == id){
+                            emp.setLivro(l);
+                            l.setDisponivel(false);
+                        }
                     }
+                    emp.setDataEmprestimo(new Date());
+                    emp.setDataDevolucao(null);
+                    emps.add(emp);
+                    bib.setEmprestimos(emps);
+                    System.out.println("Emprestimo realizado com sucesso");
+                }else{
+                    System.out.println("Não é possivel realizar o emprestimo. Livro já emprestado!");
                 }
-                emps.add(emp);
             }
-            bib.setEmprestimos(emps);
-            System.out.println("Emprestimo realizado com sucesso");
             System.out.print("Deseja ver a lista de livros disponíveis? ");
             resp = sc.nextLine();
         }
