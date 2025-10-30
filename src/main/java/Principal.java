@@ -21,9 +21,6 @@ class Principal {
 
         List<Emprestimo> emps = new ArrayList<>();
 
-        Autor autor = new Autor();
-        autor.setId(1);
-        autor.setNome("Graciliano Ramos");
         DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         Date dt = null;
         try {
@@ -31,16 +28,24 @@ class Principal {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        autor.setDataNascimento(dt);
+
+        Autor autor = new Autor(1, "Graciliano Ramos", dt);
         bib.addAutor(autor);
 
-        Livro livro = new Livro();
-        livro.setId(1);
-        livro.setAutor(autor);
-        livro.setTitulo("Livro de Graciliano Ramos");
-        livro.setDisponivel(true);
-        livro.setDataCadastro(new Date());
+        Date dt2 = null;
+        try {
+            dt2 = df.parse("20/11/1893");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        Autor autor2 = new Autor(1, "Fernando Pessoa", dt2);
+        bib.addAutor(autor2);
+
+        Livro livro = new Livro(1, "Livro de Graciliano", autor, true, new Date());
         bib.addLivro(livro);
+
+        Livro livro2 = new Livro(2, "Livro de Fernando Pessoa", autor2, true, new Date());
+        bib.addLivro(livro2);
 
         System.out.println("Empréstimos de livros\n");
 
@@ -81,11 +86,20 @@ class Principal {
             resp = sc.nextLine();
         }
 
+        System.out.println("Relatorio de Emprestimo");
         for(Emprestimo em: emps){
             System.out.println(em.getId());
             System.out.println(em.getNomeCliente());
             System.out.println(em.getLivro().getTitulo());
             System.out.println(em.getDataEmprestimo());
+        }
+
+        System.out.println("Todos os livros");
+        for(Livro liv: bib.getLivros()){
+            System.out.println(liv.getId());
+            System.out.println(liv.getTitulo());
+            System.out.println(liv.getAutor().getNome());
+            System.out.println(liv.isDisponivel() ? "Disponível" : "Emprestado");
         }
         System.out.println("Obrigado por usar o sistema de empréstimo, até a próxima!\n");
     }

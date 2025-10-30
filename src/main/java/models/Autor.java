@@ -7,6 +7,12 @@ public class Autor {
     private String nome;
     private Date dataNascimento;
 
+    public Autor(int id, String nome, Date dataNascimento) {
+        this.id = id;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+    }
+
     public int getId() {
         return id;
     }

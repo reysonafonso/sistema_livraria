@@ -10,6 +10,14 @@ public class Livro {
     private Date dataCadastro;
     private Date dataAtualizacao;
 
+    public Livro(int id, String titulo, Autor autor, boolean disponivel, Date dataCadastro) {
+        this.id = id;
+        this.titulo = titulo;
+        this.autor = autor;
+        this.disponivel = disponivel;
+        this.dataCadastro = dataCadastro;
+    }
+
     public int getId() {
         return id;
     }
