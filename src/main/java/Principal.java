@@ -32,9 +32,7 @@ class Principal {
             throw new RuntimeException(e);
         }
         autor.setDataNascimento(dt);
-
         bib.addAutor(autor);
-
 
         Livro livro = new Livro();
         livro.setId(1);
@@ -82,11 +80,12 @@ class Principal {
             System.out.print("Deseja ver a lista de livros disponíveis? ");
             resp = sc.nextLine();
         }
+
         for(Emprestimo em: emps){
             System.out.println(em.getId());
             System.out.println(em.getNomeCliente());
             System.out.println(em.getLivro().getTitulo());
-            System.out.println(em.getDataEmprestimo().toString());
+            System.out.println(em.getDataEmprestimo());
         }
         System.out.println("Obrigado por usar o sistema de empréstimo, até a próxima!\n");
     }
