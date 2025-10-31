@@ -13,94 +13,92 @@ import java.util.Scanner;
 
 class Principal {
     public static void main(String[] args) {
-        String resp = "";
-        Scanner sc = new Scanner(System.in);
 
         Biblioteca bib = new Biblioteca();
-        Emprestimo emp = new Emprestimo();
 
-        List<Emprestimo> emps = new ArrayList<>();
+        int op;
 
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        Date dt = null;
-        try {
-            dt = df.parse("20/10/1933");
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        Autor autor = new Autor(1, "Graciliano Ramos", dt);
-        bib.addAutor(autor);
-
-        Date dt2 = null;
-        try {
-            dt2 = df.parse("20/11/1893");
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        Autor autor2 = new Autor(1, "Fernando Pessoa", dt2);
-        bib.addAutor(autor2);
-
-        Livro livro = new Livro(1, "Livro de Graciliano", autor, true, new Date());
-        bib.addLivro(livro);
-
-        Livro livro2 = new Livro(2, "Livro de Fernando Pessoa", autor2, true, new Date());
-        bib.addLivro(livro2);
-
-        System.out.println("Empréstimos de livros\n");
-
-        System.out.print("Deseja ver a lista de livros disponíveis? ");
-        resp = sc.nextLine();
-        while(!resp.equals("NAO")){
-            for(Livro l: bib.livroDisponiveis()){
-                System.out.println(l.getId());
-                System.out.println(l.getTitulo());
+        do {
+            System.out.println("\nSistema de empréstimos de livros\n");
+            op = Menu();
+            switch (op) {
+                case 0:
+                    break;
+                case 1:
+                    listarLivrosDisponiveis(bib);
+                    break;
+                case 2:
+                    realizarEmprestimo(bib);
+                    break;
+                case 3:
+                    cadastrarUmLivro();
+                    break;
+                case 4:
+                    cadastrarUmAutor();
+                    break;
+                case 5:
+                    cadastrarUmCliente();
+                    break;
+                default:
+                    System.out.println("Opção inválida");
+                    break;
             }
-            System.out.print("Deseja emprestar algum livro? ");
-            resp = sc.nextLine();
-            if(resp.equals("SIM")){
-                System.out.print("Digite o ID do livro: ");
-                int id = Integer.parseInt(sc.nextLine());
+        }while (op != 0);
+        System.out.println("Obrigado por usar o sistema de empréstimo, até a próxima!\n");
+    }
 
-                if(bib.livroDisponivel(id)){
-                    System.out.println("Digite o nome do cliente: ");
-                    String nomeCliente = sc.nextLine();
-                    emp.setId(1);
-                    emp.setNomeCliente(nomeCliente);
-                    for(Livro l: bib.livroDisponiveis()){
-                        if(l.getId() == id){
-                            emp.setLivro(l);
-                            l.setDisponivel(false);
-                        }
-                    }
-                    emp.setDataEmprestimo(new Date());
-                    emp.setDataDevolucao(null);
-                    emps.add(emp);
-                    bib.setEmprestimos(emps);
-                    System.out.println("Emprestimo realizado com sucesso");
-                }else{
-                    System.out.println("Não é possivel realizar o emprestimo. Livro já emprestado!");
+    private static void cadastrarUmCliente() {
+    }
+
+    private static void cadastrarUmAutor() {
+    }
+
+    private static void cadastrarUmLivro() {
+    }
+
+    private static void realizarEmprestimo(Biblioteca bib) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Digite o ID do livro: ");
+        int id = Integer.parseInt(sc.nextLine());
+
+        if(bib.livroDisponivel(id)){
+            Emprestimo emp = new Emprestimo();
+            System.out.println("Digite o nome do cliente: ");
+            String nomeCliente = sc.nextLine();
+            emp.setId(1);
+            emp.setNomeCliente(nomeCliente);
+            for(Livro l: bib.livroDisponiveis()){
+                if(l.getId() == id){
+                    emp.setLivro(l);
+                    l.setDisponivel(false);
                 }
             }
-            System.out.print("Deseja ver a lista de livros disponíveis? ");
-            resp = sc.nextLine();
+            emp.setDataEmprestimo(new Date());
+            emp.setDataDevolucao(null);
+            bib.addEmprestimo(emp);
+            System.out.println("Emprestimo realizado com sucesso");
+        }else{
+            System.out.println("Não é possivel realizar o emprestimo. Livro já emprestado!");
         }
+    }
 
-        System.out.println("Relatorio de Emprestimo");
-        for(Emprestimo em: emps){
-            System.out.println(em.getId());
-            System.out.println(em.getNomeCliente());
-            System.out.println(em.getLivro().getTitulo());
-            System.out.println(em.getDataEmprestimo());
+    private static void listarLivrosDisponiveis(Biblioteca biblioteca) {
+        for(Livro l: biblioteca.livroDisponiveis()){
+            System.out.println(l.getId() + " - " + l.getTitulo());
         }
+    }
 
-        System.out.println("Todos os livros");
-        for(Livro liv: bib.getLivros()){
-            System.out.println(liv.getId());
-            System.out.println(liv.getTitulo());
-            System.out.println(liv.getAutor().getNome());
-            System.out.println(liv.isDisponivel() ? "Disponível" : "Emprestado");
-        }
-        System.out.println("Obrigado por usar o sistema de empréstimo, até a próxima!\n");
+    private static int Menu(){
+        System.out.println("Menu Principal");
+        System.out.println("1 - Listagem de Livros disponiveis");
+        System.out.println("2 - Realizar emprestimo");
+        System.out.println("3 - Cadastrar um livro");
+        System.out.println("4 - Cadastrar um autor");
+        System.out.println("5 - Cadastrar um cliente");
+        System.out.println("0 - Sair");
+        System.out.print("Escolha uma opcao: ");
+        Scanner sc = new Scanner(System.in);
+
+        return sc.nextInt();
     }
 }
